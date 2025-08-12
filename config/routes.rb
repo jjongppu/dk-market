@@ -5,7 +5,7 @@ DkMarket::Engine.routes.draw do
   get "/items" => "market#items"
   get "/items/:id" => "market#show"
   post "/purchase" => "market#purchase"
-  get "/my_item" => "market#my_item"
+  get "/my_items" => "market#my_items"
   post "/use" => "market#use"
   post "/unuse" => "market#unuse"
 end

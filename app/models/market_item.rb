@@ -13,5 +13,5 @@ class MarketItem < ActiveRecord::Base
 
   scope :by_category, ->(category) { where(category: category) }
 
-  attr_accessor :owned
+  attr_accessor :owned, :inventory_id, :expires_at, :is_used
 end
