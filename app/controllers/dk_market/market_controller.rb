@@ -8,7 +8,7 @@ module ::DkMarket
 
     def index
       respond_to do |format|
-        format.html { render template: "default/empty" }
+        format.html { render html: "", layout: true }
         format.json { render_serialized MarketItem.all, MarketItemSerializer }
       end
     end

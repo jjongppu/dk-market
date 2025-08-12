@@ -1,0 +1,38 @@
+.dk-market {
+  padding: 1em;
+}
+
+.market-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+
+.market-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1em;
+}
+
+.market-card {
+  border: 1px solid var(--primary-low);
+  padding: 1em;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.market-card img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 0.5em;
+}
+
+.market-card .price {
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.market-card.sold-out {
+  opacity: 0.5;
+}
