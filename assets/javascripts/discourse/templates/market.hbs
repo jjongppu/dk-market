@@ -1,30 +1,3 @@
-<div class="dk-market">
-  <div class="market-header">
-    <h1>Market</h1>
-    <div class="market-controls">
-      <Input @value={{this.q}} placeholder="Search" />
-      <select value={{this.sort}} {{on "change" this.updateSort}}>
-        <option value="">Sort</option>
-        <option value="name">Name</option>
-        <option value="price">Price</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="market-grid">
-    {{#each this.filtered as |item|}}
-      <div class="market-card {{if item.sold_out "sold-out"}}">
-        {{#if item.image}}
-          <img src={{item.image}} alt={{item.name}} />
-        {{/if}}
-        <h3>{{item.name}}</h3>
-        <p class="category">{{item.category}}</p>
-        <p class="price">{{item.price_points}}</p>
-        {{#if item.duration}}
-          <p class="duration">{{item.duration}}</p>
-        {{/if}}
-        <button {{on "click" (fn this.purchase item)}}>구매</button>
-      </div>
-    {{/each}}
-  </div>
+<div class="dk-market-page">
+  <h1>Market</h1>
 </div>
