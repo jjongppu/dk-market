@@ -1,4 +1,4 @@
-TODO_plugin_name:
-  plugin_name_enabled:
+dk_market:
+  dk_market_enabled:
     default: false
     client: true

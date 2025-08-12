@@ -3,7 +3,7 @@ en:
     admin:
       site_settings:
         categories:
-          TODO_plugin_name: "Plugin Name"
+          dk_market: "DK Market"
   js:
-    discourse_plugin_name:
+    dk_market:
       placeholder: placeholder

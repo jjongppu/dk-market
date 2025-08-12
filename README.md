@@ -1,4 +1,4 @@
-# **Plugin Name** Plugin
+# **dk-market** Plugin
 
 **Plugin Summary**
 
