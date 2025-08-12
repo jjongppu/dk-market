@@ -4,11 +4,11 @@ class MarketUserInventory < ActiveRecord::Base
   self.table_name = "market_user_inventory"
 
   belongs_to :user
-  belongs_to :market_item
+  belongs_to :market_item, class_name: "MarketItem", foreign_key: "item_id"
 
   validates :user_id, presence: true
-  validates :market_item_id, presence: true
+  validates :item_id, presence: true
 
-  scope :in_use, -> { where(in_use: true) }
+  scope :in_use, -> { where(is_used: true) }
   scope :by_user, ->(user) { where(user_id: user.id) }
 end

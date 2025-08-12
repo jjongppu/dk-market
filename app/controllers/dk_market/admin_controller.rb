@@ -38,7 +38,17 @@ module ::DkMarket
     private
 
     def item_params
-      params.require(:market_item).permit(:name, :description, :price, :category, :image_url, :duplicate_policy, :duration)
+      params.require(:market_item).permit(
+        :name,
+        :category,
+        :price_points,
+        :is_limited_duration,
+        :duration_days,
+        :duplicate_policy,
+        :image_url,
+        :is_active,
+        metadata_json: {}
+      )
     end
   end
 end
