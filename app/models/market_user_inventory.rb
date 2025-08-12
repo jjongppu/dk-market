@@ -11,4 +11,8 @@ class MarketUserInventory < ActiveRecord::Base
 
   scope :in_use, -> { where(is_used: true) }
   scope :by_user, ->(user) { where(user_id: user.id) }
+  scope :active_current, -> {
+    where(is_active: true)
+      .where("expires_at IS NULL OR expires_at > ?", Time.zone.now)
+  }
 end
