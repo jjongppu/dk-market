@@ -1,3 +1,9 @@
 <div class="dk-market-page">
   <h1>Market</h1>
+
+  <ul>
+    {{#each @model as |item|}}
+      <li>{{item.name}}</li>
+    {{/each}}
+  </ul>
 </div>

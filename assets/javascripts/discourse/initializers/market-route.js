@@ -1,4 +1,4 @@
-import Router from "discourse/lib/router";
+import Router from "discourse/router";
 
 export default {
   name: "dk-market-route",
