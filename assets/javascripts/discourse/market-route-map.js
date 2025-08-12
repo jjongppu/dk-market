@@ -1,4 +1,5 @@
 export default function () {
-  this.route("market", { path: "/market" });
-  this.route("market-my", { path: "/market/my" });
+  this.route("market", { path: "/market" }, function () {
+    this.route("my", { path: "/my" });
+  });
 }
