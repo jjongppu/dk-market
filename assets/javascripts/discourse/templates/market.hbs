@@ -10,11 +10,18 @@
         <div class="market-grid">
           {{#each group.items as |item|}}
             <article class="market-card">
-              {{#if item.image_url}}
-                <div class="market-media">
+              <div class="market-media">
+                {{#if item.image_url}}
                   <img class="market-thumb" src={{item.image_url}} alt={{item.name}} loading="lazy" />
-                </div>
-              {{/if}}
+                {{else}}
+                  <img
+                    class="market-thumb"
+                    src={{get-url "/images/no_image.png"}}
+                    alt="No Image"
+                    loading="lazy"
+                  />
+                {{/if}}
+              </div>
 
               <div class="market-info">
                 <h3 class="market-name">{{item.name}}</h3>
