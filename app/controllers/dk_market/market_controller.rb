@@ -9,8 +9,22 @@ module ::DkMarket
     end
 
     def items
-      scope = MarketItem.where(is_active: true).order(:name)
-      render_json_dump items: serialize_data(scope, MarketItemSerializer)
+      items = MarketItem.where(is_active: true).order(:category, :name).to_a
+    
+      owned_ids =
+        if current_user
+          MarketUserInventory
+            .where(user_id: current_user.id, is_active: true)
+            .where("expires_at IS NULL OR expires_at > ?", Time.zone.now)
+            .pluck(:item_id)               # ← FK는 item_id
+            .uniq
+        else
+          []
+        end
+    
+      items.each { |it| it.owned = owned_ids.include?(it.id) }
+    
+      render_json_dump items: serialize_data(items, MarketItemSerializer)
     end
 
     def show

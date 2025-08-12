@@ -36,3 +36,71 @@
 .market-card.sold-out {
   opacity: 0.5;
 }
+
+
+
+// Card -- 
+
+/* assets/stylesheets/common/dk-market.scss */
+.dk-market-page {
+  .market-title { margin: 1rem 0 1.5rem; font-size: 1.8rem; font-weight: 600; }
+
+  .market-section { margin-bottom: 2.5rem; }
+  .market-section-title { margin: 0 0 1rem; font-size: 1.3rem; font-weight: 700; }
+
+  .market-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .market-card {
+    background: var(--secondary, #fff);
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform .12s ease, box-shadow .12s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+    }
+  }
+
+  .market-media {
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    img.market-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+  }
+
+  .market-info {
+    padding: 16px;
+    display: grid;
+    gap: 8px;
+  }
+
+  .market-name { font-size: 1.1rem; font-weight: 600; margin: 0; }
+  .market-price-row {
+    display: flex; align-items: center; gap: 8px; justify-content: space-between;
+  }
+  .market-price { font-weight: 700; }
+
+  .badge {
+    font-size: .75rem; padding: 2px 8px; border-radius: 999px; line-height: 1.6;
+    background: var(--primary-low, #f3f4f6); color: var(--primary, #6b7280);
+  }
+  .badge-duration { background: var(--tertiary-low, #fef3c7); color: #92400e; }
+
+  .market-sub { color: var(--primary-medium, #6b7280); font-size: .85rem; }
+
+  .buy-btn {
+    margin-top: 8px;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-weight: 700;
+  }
+
+  .market-empty { color: var(--primary-medium, #6b7280); }
+}

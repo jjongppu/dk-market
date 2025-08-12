@@ -12,4 +12,6 @@ class MarketItem < ActiveRecord::Base
   validates :duplicate_policy, inclusion: { in: %w[deny extend allow] }, allow_blank: true
 
   scope :by_category, ->(category) { where(category: category) }
+
+  attr_accessor :owned
 end

@@ -3,35 +3,50 @@
   <h1 class="market-title">Market</h1>
 
   {{#if @model.length}}
-    <div class="market-grid">
-      {{#each @model as |item|}}
-        <article class="market-card">
-          {{#if item.image_url}}
-            <img class="market-thumb" src={{item.image_url}} alt={{item.name}} loading="lazy" />
-          {{/if}}
+    {{#each @model as |group|}}
+      <section class="market-section">
+        <h2 class="market-section-title">{{group.category}}</h2>
 
-          <div class="market-body">
-            <h3 class="market-name">{{item.name}}</h3>
-
-            <div class="market-row">
-              <span class="market-cat">{{item.category}}</span>
-              <span class="market-price">{{item.price_points}} pts</span>
-            </div>
-
-            <div class="market-badges">
-              {{#if item.is_limited_duration}}
-                <span class="badge badge-duration">기간제 {{item.duration_days}}일</span>
+        <div class="market-grid">
+          {{#each group.items as |item|}}
+            <article class="market-card">
+              {{#if item.image_url}}
+                <div class="market-media">
+                  <img class="market-thumb" src={{item.image_url}} alt={{item.name}} loading="lazy" />
+                </div>
               {{/if}}
 
-              {{#if item.duplicate_policy}}
-                <span class="badge badge-dup">중복: {{item.duplicate_policy}}</span>
-              {{/if}}
-            </div>
-          </div>
-        </article>
-      {{/each}}
-    </div>
+              <div class="market-info">
+                <h3 class="market-name">{{item.name}}</h3>
+
+                <div class="market-price-row">
+                  <span class="market-price">{{item.price_points}} pts</span>
+                  {{#if item.is_limited_duration}}
+                    <span class="badge badge-duration">기간제 {{item.duration_days}}일</span>
+                  {{/if}}
+                </div>
+
+                {{#if item.owned}}
+                  <div class="market-sub owned">보유중</div>
+                {{else if item.duplicate_policy}}
+                  <div class="market-sub">중복: {{item.duplicate_policy}}</div>
+                {{/if}}
+
+                <button
+                  class="btn buy-btn"
+                  disabled={{item.owned}}
+                  aria-disabled={{item.owned}}
+                  title={{if item.owned "이미 보유한 아이템입니다" "구매하기"}}
+                >
+                  {{if item.owned "OWNED" "BUY NOW"}}
+                </button>
+              </div>
+            </article>
+          {{/each}}
+        </div>
+      </section>
+    {{/each}}
   {{else}}
-    <p class="market-empty">아이템이 없습니다.</p>
+    <p class="market-empty">활성화된 아이템이 없습니다.</p>
   {{/if}}
 </div>
