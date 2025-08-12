@@ -4,17 +4,17 @@ require_dependency "dk_market/market_controller"
 require_dependency "dk_market/admin_controller"
 
 DkMarket::Engine.routes.draw do
-  get "/" => "market#index"
-  get "/items" => "market#items"
-  get "/items/:id" => "market#show"
-  post "/purchase" => "market#purchase"
-  get "/my_item" => "market#my_item"
-  post "/use" => "market#use"
-  post "/unuse" => "market#unuse"
+  get "/market" => "market#index"
+  get "/market/items" => "market#items"
+  get "/market/items/:id" => "market#show"
+  post "/market/purchase" => "market#purchase"
+  get "/market/my_item" => "market#my_item"
+  post "/market/use" => "market#use"
+  post "/market/unuse" => "market#unuse"
 end
 
-Discourse::Application.routes.draw do
-  mount ::DkMarket::Engine, at: "/market"
+Discourse::Application.routes.append do
+  mount ::DkMarket::Engine, at: "/"
 
   constraints StaffConstraint.new do
     get "/admin/market_admin" => "dk_market/admin#index"
