@@ -1,3 +1,5 @@
-export default function () {
-  this.route("market", { path: "/market" });
-}
+export default {
+  map() {
+    this.route("market", { path: "/market" });
+  },
+};
