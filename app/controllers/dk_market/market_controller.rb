@@ -9,7 +9,8 @@ module ::DkMarket
     end
 
     def items
-      render json: { items: [{ id: 1, name: "Example Item" }] }
+      scope = MarketItem.where(is_active: true).order(:name)
+      render_json_dump items: serialize_data(scope, MarketItemSerializer)
     end
 
     def show
