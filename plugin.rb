@@ -15,6 +15,7 @@ module ::DkMarket
 end
 
 require_relative "lib/dk_market/engine"
+register_asset "stylesheets/common/dk-market.scss"
 
 after_initialize do
   # Code which should run after Rails has finished booting
