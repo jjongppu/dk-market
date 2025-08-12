@@ -7,10 +7,7 @@ module ::DkMarket
     before_action :ensure_logged_in, only: %i[purchase my_item use unuse]
 
     def index
-      respond_to do |format|
-        format.html { render html: "", layout: true }
-        format.json { render_serialized MarketItem.all, MarketItemSerializer }
-      end
+      render html: "", layout: true
     end
 
     def items
