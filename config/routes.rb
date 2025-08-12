@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_dependency "market/market_controller"
-require_dependency "market/admin_controller"
+require_dependency "dk_market/market_controller"
+require_dependency "dk_market/admin_controller"
 
 DkMarket::Engine.routes.draw do
   get "/" => "market#index"
@@ -17,10 +17,10 @@ Discourse::Application.routes.draw do
   mount ::DkMarket::Engine, at: "/market"
 
   constraints StaffConstraint.new do
-    get "/admin/market_admin" => "market/admin#index"
-    get "/admin/market_admin/items" => "market/admin#index"
-    post "/admin/market_admin/items" => "market/admin#create"
-    put "/admin/market_admin/items/:id" => "market/admin#update"
-    delete "/admin/market_admin/items/:id" => "market/admin#destroy"
+    get "/admin/market_admin" => "dk_market/admin#index"
+    get "/admin/market_admin/items" => "dk_market/admin#index"
+    post "/admin/market_admin/items" => "dk_market/admin#create"
+    put "/admin/market_admin/items/:id" => "dk_market/admin#update"
+    delete "/admin/market_admin/items/:id" => "dk_market/admin#destroy"
   end
 end

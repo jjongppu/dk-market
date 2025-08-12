@@ -11,13 +11,13 @@ module Market
       MarketUserInventory
         .joins(:market_item)
         .where(user_id: @user.id, market_items: { category: @inventory.market_item.category })
-        .update_all(in_use: false)
+        .update_all(is_used: false)
 
-      @inventory.update!(in_use: true)
+      @inventory.update!(is_used: true)
     end
 
     def unuse
-      @inventory.update!(in_use: false)
+      @inventory.update!(is_used: false)
     end
   end
 end
