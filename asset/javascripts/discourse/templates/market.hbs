@@ -1,0 +1,12 @@
+<section class="dk-market">
+  <h1>Market</h1>
+  {{#if this.model.length}}
+    <ul>
+      {{#each this.model as |item|}}
+        <li>{{item.name}} — {{item.price_points}} pts</li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <p>아이템이 없습니다.</p>
+  {{/if}}
+</section>
