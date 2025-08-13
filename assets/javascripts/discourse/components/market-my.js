@@ -32,7 +32,10 @@ export default class MarketMyComponent extends Component {
     this.isLoading = true;
     try {
       const json = await ajax("/market/my_items");
-      this.items = this._groupByCategory(json?.items ?? []);
+      console.log("[market-my] fetched items", json?.items);
+      const grouped = this._groupByCategory(json?.items ?? []);
+      console.log("[market-my] grouped items", grouped);
+      this.items = grouped;
     } catch (e) {
       popupAjaxError(e);
       this.items = [];
@@ -44,6 +47,7 @@ export default class MarketMyComponent extends Component {
   _groupByCategory(items = []) {
     const groups = {};
     for (const item of items) {
+      console.log("[market-my] processing item", item);
       const cat = item?.category || "기타";
       (groups[cat] ||= []).push(item);
     }
