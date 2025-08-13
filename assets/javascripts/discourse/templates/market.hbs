@@ -17,6 +17,7 @@
     </button>
   </nav>
 
+  {{!-- ================= SHOP TAB ================= --}}
   {{#if (eq this.activeTab 'shop')}}
     <h1 class="market-title">Market</h1>
 
@@ -32,12 +33,7 @@
                   {{#if item.image_url}}
                     <img class="market-thumb" src={{item.image_url}} alt={{item.name}} loading="lazy" />
                   {{else}}
-                    <img
-                      class="market-thumb"
-                      src={{get-url "/images/no_image.png"}}
-                      alt="No Image"
-                      loading="lazy"
-                    />
+                    <img class="market-thumb" src={{get-url "/images/no_image.png"}} alt="No Image" loading="lazy" />
                   {{/if}}
                 </div>
 
@@ -74,10 +70,14 @@
     {{else}}
       <p class="market-empty">활성화된 아이템이 없습니다.</p>
     {{/if}}
+
+  {{!-- ================= MY ITEMS TAB ================= --}}
   {{else}}
     <h1 class="market-title">My Items</h1>
 
-    {{#if this.myItems}}
+    {{#if this.isLoadingMyItems}}
+      <p class="market-empty">Loading...</p>
+    {{else if this.myItems}}
       {{#if this.myItems.length}}
         {{#each this.myItems as |group|}}
           <section class="market-section">
@@ -90,20 +90,25 @@
                     {{#if item.image_url}}
                       <img class="market-thumb" src={{item.image_url}} alt={{item.name}} loading="lazy" />
                     {{else}}
-                      <img
-                        class="market-thumb"
-                        src={{get-url "/images/no_image.png"}}
-                        alt="No Image"
-                        loading="lazy"
-                      />
+                      <img class="market-thumb" src={{get-url "/images/no_image.png"}} alt="No Image" loading="lazy" />
                     {{/if}}
                   </div>
 
                   <div class="market-info">
                     <h3 class="market-name">{{item.name}}</h3>
 
-                    <button class="btn use-btn" {{on "click" (fn this.toggleUse item)}}>
-                      {{if item.is_used "UNEQUIP" "EQUIP"}}
+                    <button
+                      class="btn use-btn"
+                      disabled={{eq this.togglingId item.inventory_id}}
+                      aria-disabled={{eq this.togglingId item.inventory_id}}
+                      title={{if (eq this.togglingId item.inventory_id) "처리 중..." (if item.is_used "해제" "장착")}}
+                      {{on "click" (fn this.toggleUse item)}}
+                    >
+                      {{#if (eq this.togglingId item.inventory_id)}}
+                        Processing...
+                      {{else}}
+                        {{if item.is_used "UNEQUIP" "EQUIP"}}
+                      {{/if}}
                     </button>
                   </div>
                 </article>
