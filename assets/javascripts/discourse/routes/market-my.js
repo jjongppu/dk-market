@@ -5,9 +5,11 @@ import { ajax } from "discourse/lib/ajax";
 export default class MarketMyRoute extends DiscourseRoute {
   async model() {
     const json = await ajax("/market/my_items");
+    console.log("[market-my route] fetched items", json.items);
     const groups = {};
 
     (json.items || []).forEach((item) => {
+      console.log("[market-my route] processing item", item);
       const cat = item.category || "기타";
       if (!groups[cat]) {
         groups[cat] = [];
@@ -15,7 +17,7 @@ export default class MarketMyRoute extends DiscourseRoute {
       groups[cat].push(item);
     });
 
-    return Object.keys(groups)
+    const result = Object.keys(groups)
       .sort((a, b) => a.localeCompare(b))
       .map((category) => ({
         category,
@@ -23,5 +25,7 @@ export default class MarketMyRoute extends DiscourseRoute {
           (a.name || "").localeCompare(b.name || "")
         ),
       }));
+    console.log("[market-my route] grouped items", result);
+    return result;
   }
 }
