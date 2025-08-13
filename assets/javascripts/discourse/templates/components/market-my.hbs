@@ -3,19 +3,19 @@
   <button
     type="button"
     class="refresh-btn"
-    disabled={{@refreshCooling}}
-    aria-disabled={{@refreshCooling}}
+    disabled={{this.refreshCooling}}
+    aria-disabled={{this.refreshCooling}}
     title="새로고침"
-    {{on "click" @refresh}}
+    {{on "click" this.refresh}}
   >
     {{d-icon "sync"}}
   </button>
 </h1>
 
-{{#if @isLoading}}
+{{#if this.isLoading}}
   <p class="market-empty">불러오는 중...</p>
 {{else}}
-  {{#let (or @items []) as |groups|}}
+  {{#let (or this.items []) as |groups|}}
     {{#if groups.length}}
       {{#each groups as |group|}}
         <section class="market-section">
@@ -39,17 +39,17 @@
                     <button
                       class="btn use-btn"
                       disabled={{or
-                        (eq @togglingId item.inventory_id)
-                        (includes (or @cooldownIds []) item.inventory_id)
+                        (eq this.togglingId item.inventory_id)
+                        (includes (or this.cooldownIds []) item.inventory_id)
                       }}
                       aria-disabled={{or
-                        (eq @togglingId item.inventory_id)
-                        (includes (or @cooldownIds []) item.inventory_id)
+                        (eq this.togglingId item.inventory_id)
+                        (includes (or this.cooldownIds []) item.inventory_id)
                       }}
-                      title={{if (eq @togglingId item.inventory_id) "처리 중..." (if item.is_used "해제" "장착")}}
-                      {{on "click" (fn @toggleUse item)}}
+                      title={{if (eq this.togglingId item.inventory_id) "처리 중..." (if item.is_used "해제" "장착")}}
+                      {{on "click" (fn this.toggleUse item)}}
                     >
-                      {{#if (eq @togglingId item.inventory_id)}}
+                      {{#if (eq this.togglingId item.inventory_id)}}
                         처리 중...
                       {{else}}
                         {{if item.is_used "해제" "장착"}}
