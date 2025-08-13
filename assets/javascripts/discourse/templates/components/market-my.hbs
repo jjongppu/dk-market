@@ -3,59 +3,67 @@
   <button
     type="button"
     class="refresh-btn"
-    disabled={{this.refreshCooling}}
-    aria-disabled={{this.refreshCooling}}
+    disabled={{@refreshCooling}}
+    aria-disabled={{@refreshCooling}}
     title="새로고침"
-    {{on "click" this.refresh}}
+    {{on "click" @refresh}}
   >
     {{d-icon "sync"}}
   </button>
 </h1>
 
-{{#if this.isLoading}}
+{{#if @isLoading}}
   <p class="market-empty">불러오는 중...</p>
-{{else if this.items}}
-  {{#if this.items.length}}
-    {{#each this.items as |group|}}
-      <section class="market-section">
-        <h2 class="market-section-title">{{group.category}}</h2>
-
-        <div class="market-grid">
-          {{#each group.items as |item|}}
-            <article class="market-card">
-              <div class="market-media">
-                {{#if item.image_url}}
-                  <img class="market-thumb" src={{item.image_url}} alt={{item.name}} loading="lazy" />
-                {{else}}
-                  <img class="market-thumb" src={{get-url "/images/no_image.png"}} alt="이미지 없음" loading="lazy" />
-                {{/if}}
-              </div>
-
-              <div class="market-info">
-                <h3 class="market-name">{{item.name}}</h3>
-
-                <button
-                  class="btn use-btn"
-                  disabled={{or (eq this.togglingId item.inventory_id) (this.cooldownIds.includes item.inventory_id)}}
-                  aria-disabled={{or (eq this.togglingId item.inventory_id) (this.cooldownIds.includes item.inventory_id)}}
-                  title={{if (eq this.togglingId item.inventory_id) "처리 중..." (if item.is_used "해제" "장착")}}
-                  {{on "click" (fn this.toggleUse item)}}
-                >
-                  {{#if (eq this.togglingId item.inventory_id)}}
-                    처리 중...
-                  {{else}}
-                    {{if item.is_used "해제" "장착"}}
-                  {{/if}}
-                </button>
-              </div>
-            </article>
-          {{/each}}
-        </div>
-      </section>
-    {{/each}}
-  {{else}}
-    <p class="market-empty">보유한 아이템이 없습니다.</p>
-  {{/if}}
 {{else}}
-  <p class="market-empty">불러오는 중...</p>
+  {{#let (or @items []) as |groups|}}
+    {{#if groups.length}}
+      {{#each groups as |group|}}
+        <section class="market-section">
+          <h2 class="market-section-title">{{group.category}}</h2>
+
+          <div class="market-grid">
+            {{#let (or group.items []) as |items|}}
+              {{#each items as |item|}}
+                <article class="market-card">
+                  <div class="market-media">
+                    {{#if item.image_url}}
+                      <img class="market-thumb" src={{item.image_url}} alt={{item.name}} loading="lazy" />
+                    {{else}}
+                      <img class="market-thumb" src={{get-url "/images/no_image.png"}} alt="이미지 없음" loading="lazy" />
+                    {{/if}}
+                  </div>
+
+                  <div class="market-info">
+                    <h3 class="market-name">{{item.name}}</h3>
+
+                    <button
+                      class="btn use-btn"
+                      disabled={{or
+                        (eq @togglingId item.inventory_id)
+                        (includes (or @cooldownIds []) item.inventory_id)
+                      }}
+                      aria-disabled={{or
+                        (eq @togglingId item.inventory_id)
+                        (includes (or @cooldownIds []) item.inventory_id)
+                      }}
+                      title={{if (eq @togglingId item.inventory_id) "처리 중..." (if item.is_used "해제" "장착")}}
+                      {{on "click" (fn @toggleUse item)}}
+                    >
+                      {{#if (eq @togglingId item.inventory_id)}}
+                        처리 중...
+                      {{else}}
+                        {{if item.is_used "해제" "장착"}}
+                      {{/if}}
+                    </button>
+                  </div>
+                </article>
+              {{/each}}
+            {{/let}}
+          </div>
+        </section>
+      {{/each}}
+    {{else}}
+      <p class="market-empty">보유한 아이템이 없습니다.</p>
+    {{/if}}
+  {{/let}}
 {{/if}}
