@@ -103,4 +103,25 @@
   }
 
   .market-empty { color: var(--primary-medium, #6b7280); }
+
+  .market-tabs {
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid var(--primary-low, #f3f4f6);
+    margin-bottom: 1rem;
+
+    .tab {
+      padding: 8px 16px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--primary-medium, #6b7280);
+
+      &.active {
+        color: var(--primary, #000);
+        border-bottom: 2px solid var(--primary, #000);
+      }
+    }
+  }
 }
