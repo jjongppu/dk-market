@@ -42,7 +42,11 @@
 
               <div class="market-info">
                 <h3 class="market-name">{{item.name}}</h3>
-
+                {{#if item.remaining_time}}
+                  <div class="market-price-row">
+                    <span class="badge badge-duration">{{item.remaining_time}}</span>
+                  </div>
+                {{/if}}
                 <button
                   class="btn use-btn"
                   disabled={{if (eq this.togglingId item.inventory_id) true item._cooldown}}
