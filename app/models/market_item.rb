@@ -10,8 +10,9 @@ class MarketItem < ActiveRecord::Base
   validates :category, presence: true
   validates :price_points, presence: true
   validates :duplicate_policy, inclusion: { in: %w[deny extend allow] }, allow_blank: true
+  validates :mix_level, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   scope :by_category, ->(category) { where(category: category) }
 
-  attr_accessor :owned, :inventory_id, :expires_at, :is_used
+  attr_accessor :owned, :inventory_id, :expires_at, :is_used, :level_image_url
 end

@@ -18,7 +18,7 @@
   </nav>
 
   {{#if (eq this.activeTab 'shop')}}
-    <MarketItem @groups={{@model}} />
+    <MarketItem @groups={{@model.categories}} @points={{@model.points}} @currentLevel={{@model.level}} />
   {{else}}
     <MarketMy />
   {{/if}}

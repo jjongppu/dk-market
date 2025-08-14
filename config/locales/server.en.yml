@@ -3,3 +3,4 @@ en:
     errors:
       already_owned: "Item already owned."
       not_enough_points: "Not enough points."
+      low_level: "Your level is too low to purchase this item."

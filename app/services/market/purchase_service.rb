@@ -17,11 +17,24 @@ module Market
             item_id: @item.id,
           )
 
-        before_points =
+        point_score =
           DB.query_single(
-            "SELECT COALESCE(point,0) FROM gamification_scores WHERE user_id = ?",
+            "SELECT COALESCE(point,0), COALESCE(score,0) FROM gamification_scores WHERE user_id = ?",
             @user.id,
+          )
+        before_points = point_score[0].to_i
+        score = point_score[1].to_i
+
+        level_id =
+          DB.query_single(
+            "SELECT id FROM gamification_level_infos WHERE min_score <= ? AND max_score >= ? LIMIT 1",
+            score,
+            score,
           ).first.to_i
+        if level_id < @item.mix_level
+          return Result.new(false, I18n.t("market.errors.low_level"))
+        end
+
         if before_points < @item.price_points
           return Result.new(false, I18n.t("market.errors.not_enough_points"))
         end

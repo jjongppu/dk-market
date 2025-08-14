@@ -7,7 +7,8 @@ import { popupAjaxError } from "discourse/lib/ajax-error";
 export default class MarketItemComponent extends Component {
   @action
   async buy(item) {
-    if (item.owned || item.isCooldown) {
+    const currentLevelId = this.args.currentLevel?.id || 0;
+    if (item.owned || item.isCooldown || currentLevelId < item.mix_level) {
       return;
     }
     set(item, "isCooldown", true);

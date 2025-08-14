@@ -3,3 +3,4 @@ ko:
     errors:
       already_owned: "이미 보유한 아이템입니다."
       not_enough_points: "포인트가 부족합니다."
+      low_level: "레벨이 부족합니다."
