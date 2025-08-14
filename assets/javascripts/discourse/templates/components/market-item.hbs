@@ -1,4 +1,10 @@
 <h1 class="market-title">상점</h1>
+<div class="market-header">
+  <span class="market-points">보유 사용가능 포인트 : {{@points}}</span>
+  {{#if @currentLevel}}
+    <span class="market-level">현재 레벨 : {{@currentLevel.name}}</span>
+  {{/if}}
+</div>
 
 {{#let (or @groups []) as |groups|}}
   {{#if groups.length}}
@@ -9,36 +15,46 @@
         <div class="market-grid">
           {{#let (or group.items []) as |items|}}
             {{#each items as |item|}}
-              <article class="market-card">
-                <div class="market-media">
-                  {{#if item.image_url}}
-                    <img class="market-thumb" src={{item.image_url}} alt={{item.name}} loading="lazy" />
-                  {{else}}
-                    <img class="market-thumb" src={{get-url "/plugins/dk-market/images/no_image.png"}} alt="이미지 없음" loading="lazy" />
-                  {{/if}}
-                </div>
-
-                <div class="market-info">
-                  <h3 class="market-name">{{item.name}}</h3>
-
-                  <div class="market-price-row">
-                    {{#if item.is_limited_duration}}
-                      <span class="badge badge-duration">기간제 {{item.duration_days}}일</span>
-                    {{/if}} 
-                    <span class="market-price">{{item.price_points}} 포인트</span>
+              {{#let (lt (or @currentLevel.id 0) item.mix_level) as |locked|}}
+                <article class="market-card {{if locked 'locked'}}">
+                  <div class="market-media">
+                    {{#if item.image_url}}
+                      <img class="market-thumb" src={{item.image_url}} alt={{item.name}} loading="lazy" />
+                    {{else}}
+                      <img class="market-thumb" src={{get-url "/plugins/dk-market/images/no_image.png"}} alt="이미지 없음" loading="lazy" />
+                    {{/if}}
                   </div>
 
-                  <button
-                    class="btn buy-btn"
-                    disabled={{or item.owned item.isCooldown}}
-                    aria-disabled={{or item.owned item.isCooldown}}
-                    title={{if item.owned "이미 보유한 아이템입니다" "구매"}}
-                    {{on "click" (fn this.buy item)}}
-                  >
-                    {{if item.owned "보유중" "구매"}}
-                  </button>
-                </div>
-              </article>
+                  <div class="market-info">
+                    <h3 class="market-name">{{item.name}}</h3>
+
+                    <div class="market-price-row">
+                      {{#if item.is_limited_duration}}
+                        <span class="badge badge-duration">기간제 {{item.duration_days}}일</span>
+                      {{/if}}
+                      <span class="market-price">{{item.price_points}} 포인트</span>
+                    </div>
+
+                    <button
+                      class="btn buy-btn"
+                      disabled={{or item.owned item.isCooldown locked}}
+                      aria-disabled={{or item.owned item.isCooldown locked}}
+                      title={{if item.owned "이미 보유한 아이템입니다" "구매"}}
+                      {{on "click" (fn this.buy item)}}
+                    >
+                      {{if item.owned "보유중" "구매"}}
+                    </button>
+                  </div>
+
+                  {{#if locked}}
+                    <div class="market-lock-overlay">
+                      {{#if item.level_image_url}}
+                        <img src={{item.level_image_url}} alt="필요 레벨" />
+                      {{/if}}
+                    </div>
+                  {{/if}}
+                </article>
+              {{/let}}
             {{/each}}
           {{/let}}
         </div>

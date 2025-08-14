@@ -13,16 +13,17 @@ export default class MarketRoute extends DiscourseRoute {
       groups[cat].push(item);
     });
 
-    // 카테고리명, 아이템명 기준 정렬
     const categories = Object.keys(groups)
       .sort((a, b) => a.localeCompare(b))
       .map((category) => ({
         category,
-        items: groups[category].sort((a, b) =>
-          (a.name || "").localeCompare(b.name || "")
-        ),
+        items: groups[category],
       }));
 
-    return categories;
+    return {
+      categories,
+      points: json.points,
+      level: json.level,
+    };
   }
 }

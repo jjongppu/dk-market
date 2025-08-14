@@ -11,22 +11,52 @@ module ::DkMarket
     end
 
     def items
-      items = MarketItem.where(is_active: true).order(:category, :name).to_a
-    
+      items =
+        MarketItem
+          .where(is_active: true)
+          .joins(
+            "LEFT JOIN gamification_level_infos ON gamification_level_infos.id = market_items.mix_level",
+          )
+          .select("market_items.*, gamification_level_infos.image_url AS level_image_url")
+          .order(:mix_level, :category, :name)
+          .to_a
+
       owned_ids =
         if current_user
           MarketUserInventory
             .where(user_id: current_user.id, is_active: true)
             .where("expires_at IS NULL OR expires_at > ?", Time.zone.now)
-            .pluck(:item_id)               # ← FK는 item_id
+            .pluck(:item_id)
             .uniq
         else
           []
         end
-    
+
       items.each { |it| it.owned = owned_ids.include?(it.id) }
-    
-      render_json_dump items: serialize_data(items, MarketItemSerializer)
+
+      points = 0
+      level = nil
+      if current_user
+        point_score =
+          DB.query_single(
+            "SELECT COALESCE(point,0), COALESCE(score,0) FROM gamification_scores WHERE user_id = ?",
+            current_user.id,
+          )
+        points = point_score[0].to_i
+        score = point_score[1].to_i
+        level =
+          DB.query_hash(
+            "SELECT id, name, image_url FROM gamification_level_infos WHERE min_score <= ? AND max_score >= ? LIMIT 1",
+            score,
+            score,
+          ).first
+      end
+
+      render_json_dump(
+        items: serialize_data(items, MarketItemSerializer),
+        points: points,
+        level: level,
+      )
     end
 
     def show
@@ -53,11 +83,22 @@ module ::DkMarket
       item = MarketItem.find_by(id: params[:item_id], is_active: true)
       raise Discourse::InvalidParameters unless item
 
-      before_points =
+      point_score =
         DB.query_single(
-          "SELECT COALESCE(point,0) FROM gamification_scores WHERE user_id = ?",
+          "SELECT COALESCE(point,0), COALESCE(score,0) FROM gamification_scores WHERE user_id = ?",
           current_user.id,
+        )
+      before_points = point_score[0].to_i
+      score = point_score[1].to_i
+      level_id =
+        DB.query_single(
+          "SELECT id FROM gamification_level_infos WHERE min_score <= ? AND max_score >= ? LIMIT 1",
+          score,
+          score,
         ).first.to_i
+      if level_id < item.mix_level
+        return render_json_error I18n.t("market.errors.low_level")
+      end
 
       inventory =
         MarketUserInventory.active_current.find_by(

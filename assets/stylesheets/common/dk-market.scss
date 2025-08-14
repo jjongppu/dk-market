@@ -67,6 +67,22 @@
       transform: translateY(-2px);
       box-shadow: 0 10px 24px rgba(0,0,0,0.08);
     }
+
+    &.locked {
+      position: relative;
+
+      .market-media, .market-info {
+        filter: blur(4px);
+      }
+
+      .market-lock-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+      }
+    }
   }
 
   .market-media {
