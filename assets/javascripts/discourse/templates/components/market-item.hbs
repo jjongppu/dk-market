@@ -14,7 +14,7 @@
                   {{#if item.image_url}}
                     <img class="market-thumb" src={{item.image_url}} alt={{item.name}} loading="lazy" />
                   {{else}}
-                    <img class="market-thumb" src={{get-url "/images/no_image.png"}} alt="이미지 없음" loading="lazy" />
+                    <img class="market-thumb" src={{get-url "/plugins/dk-market/images/no_image.png"}} alt="이미지 없음" loading="lazy" />
                   {{/if}}
                 </div>
 
@@ -22,17 +22,11 @@
                   <h3 class="market-name">{{item.name}}</h3>
 
                   <div class="market-price-row">
-                    <span class="market-price">{{item.price_points}} 포인트</span>
                     {{#if item.is_limited_duration}}
                       <span class="badge badge-duration">기간제 {{item.duration_days}}일</span>
                     {{/if}}
+                    <span class="market-price">{{item.price_points}} 포인트</span>
                   </div>
-
-                  {{#if item.owned}}
-                    <div class="market-sub owned">보유중</div>
-                  {{else if item.duplicate_policy}}
-                    <div class="market-sub">중복: {{item.duplicate_policy}}</div>
-                  {{/if}}
 
                   <button
                     class="btn buy-btn"

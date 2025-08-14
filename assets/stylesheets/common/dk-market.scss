@@ -72,7 +72,11 @@
   .market-media {
     aspect-ratio: 16/9;
     overflow: hidden;
-    img.market-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img.market-thumb { width: auto; height: 100%; object-fit: cover; display: block; }
   }
 
   .market-info {
