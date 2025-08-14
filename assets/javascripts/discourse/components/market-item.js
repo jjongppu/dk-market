@@ -8,7 +8,7 @@ export default class MarketItemComponent extends Component {
   @action
   async buy(item) {
     const currentLevelId = this.args.currentLevel?.id || 0;
-    if (item.owned || item.isCooldown || currentLevelId < item.mix_level) {
+    if (item.owned || item.isCooldown || currentLevelId < item.min_level) {
       return;
     }
     set(item, "isCooldown", true);

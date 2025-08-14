@@ -31,7 +31,7 @@ module Market
             score,
             score,
           ).first.to_i
-        if level_id < @item.mix_level
+        if level_id < @item.min_level
           return Result.new(false, I18n.t("market.errors.low_level"))
         end
 

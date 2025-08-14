@@ -15,7 +15,7 @@
         <div class="market-grid">
           {{#let (or group.items []) as |items|}}
             {{#each items as |item|}}
-              {{#let (lt (or @currentLevel.id 0) item.mix_level) as |locked|}}
+              {{#let (lt (or @currentLevel.id 0) item.min_level) as |locked|}}
                 <article class="market-card {{if locked 'locked'}}">
                   <div class="market-media">
                     {{#if item.image_url}}

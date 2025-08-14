@@ -15,10 +15,10 @@ module ::DkMarket
         MarketItem
           .where(is_active: true)
           .joins(
-            "LEFT JOIN gamification_level_infos ON gamification_level_infos.id = market_items.mix_level",
+            "LEFT JOIN gamification_level_infos ON gamification_level_infos.id = market_items.min_level",
           )
           .select("market_items.*, gamification_level_infos.image_url AS level_image_url")
-          .order(:mix_level, :category, :name)
+          .order(:min_level, :category, :name)
           .to_a
 
       owned_ids =
@@ -96,7 +96,7 @@ module ::DkMarket
           score,
           score,
         ).first.to_i
-      if level_id < item.mix_level
+      if level_id < item.min_level
         return render_json_error I18n.t("market.errors.low_level")
       end
 

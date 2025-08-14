@@ -1,7 +1,7 @@
 -- Sample seed data for dk-market plugin
 
 -- Market Items
-INSERT INTO market_items (id, name, category, price_points, is_limited_duration, duration_days, duplicate_policy, image_url, metadata_json, is_active, mix_level) VALUES
+INSERT INTO market_items (id, name, category, price_points, is_limited_duration, duration_days, duplicate_policy, image_url, metadata_json, is_active, min_level) VALUES
   (1, 'Sword', 'weapon', 100, true, 30, 'deny', 'https://example.com/sword.png', '{"description":"A sharp blade"}', true, 1),
   (2, 'Shield', 'armor', 150, true, 30, 'extend', 'https://example.com/shield.png', '{"description":"Protect yourself"}', true, 2),
   (3, 'Potion', 'consumable', 50, false, NULL, 'allow', 'https://example.com/potion.png', '{"description":"Heals 50 HP"}', true, 0),
