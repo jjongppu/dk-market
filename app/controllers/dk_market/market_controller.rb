@@ -4,7 +4,7 @@ module ::DkMarket
   class MarketController < ::ApplicationController
     requires_plugin ::DkMarket::PLUGIN_NAME
 
-    before_action :ensure_logged_in, only: %i[purchase my_items use unuse]
+    before_action :ensure_logged_in, only: %i[purchase purchase_info my_items use unuse]
 
     def index
       render html: "", layout: true
@@ -47,6 +47,30 @@ module ::DkMarket
       else
         render_json_error result.error
       end
+    end
+
+    def purchase_info
+      item = MarketItem.find_by(id: params[:item_id], is_active: true)
+      raise Discourse::InvalidParameters unless item
+
+      before_points =
+        DB.query_single(
+          "SELECT COALESCE(point,0) FROM gamification_scores WHERE user_id = ?",
+          current_user.id,
+        ).first.to_i
+
+      inventory =
+        MarketUserInventory.active_current.find_by(
+          user_id: current_user.id,
+          item_id: item.id,
+        )
+
+      render_json_dump(
+        points: before_points,
+        is_active: inventory.present?,
+        price_points: item.price_points,
+        duration_days: item.duration_days,
+      )
     end
 
     def my_items
