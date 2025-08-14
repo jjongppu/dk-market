@@ -4,6 +4,7 @@ DkMarket::Engine.routes.draw do
   root to: "market#index"
   get "/items" => "market#items"
   get "/items/:id" => "market#show"
+  get "/purchase_info" => "market#purchase_info"
   post "/purchase" => "market#purchase"
   get "/my_items" => "market#my_items"
   post "/use" => "market#use"
