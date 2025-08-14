@@ -1,5 +1,17 @@
 {{!-- assets/javascripts/discourse/templates/components/market-my.hbs --}}
-<h1 class="market-title"> … </h1>
+<h1 class="market-title">
+  내 아이템
+  <button
+    type="button"
+    class="refresh-btn"
+    disabled={{this.refreshCooling}}
+    aria-disabled={{this.refreshCooling}}
+    title="새로고침"
+    {{on "click" this.refresh}}
+  >
+    {{d-icon "sync"}}
+  </button>
+</h1>
 
 {{#if this.isLoading}}
   <p class="market-empty">불러오는 중...</p>
@@ -45,4 +57,4 @@
   {{else}}
     <p class="market-empty">보유한 아이템이 없습니다.</p>
   {{/if}}
-{{/if}}  {{!-- ← 올바른 닫힘 --}}
+{{/if}}
