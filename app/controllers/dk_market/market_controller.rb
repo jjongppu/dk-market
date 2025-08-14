@@ -4,7 +4,7 @@ module ::DkMarket
   class MarketController < ::ApplicationController
     requires_plugin ::DkMarket::PLUGIN_NAME
 
-    before_action :ensure_logged_in, only: %i[my_items use unuse]
+    before_action :ensure_logged_in, only: %i[purchase my_items use unuse]
 
     def index
       render html: "", layout: true
@@ -34,7 +34,19 @@ module ::DkMarket
     end
 
     def purchase
-      render json: { success: true }
+      item = MarketItem.find_by(id: params[:item_id], is_active: true)
+      raise Discourse::InvalidParameters unless item
+
+      result = Market::PurchaseService.new(current_user, item).perform
+      if result.success?
+        render_json_dump(
+          success: true,
+          before_points: result.before_points,
+          after_points: result.after_points,
+        )
+      else
+        render_json_error result.error
+      end
     end
 
     def my_items

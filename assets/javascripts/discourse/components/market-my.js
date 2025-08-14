@@ -33,6 +33,21 @@ export default class MarketMyComponent extends Component {
     }));
   }
 
+  _calcRemaining(expiresAt) {
+    if (!expiresAt) {
+      return null;
+    }
+    const diff = new Date(expiresAt) - new Date();
+    if (diff <= 0) {
+      return null;
+    }
+    const dayMs = 1000 * 60 * 60 * 24;
+    const hourMs = 1000 * 60 * 60;
+    const days = Math.floor(diff / dayMs);
+    const hours = Math.floor((diff % dayMs) / hourMs);
+    return `${String(days).padStart(2, "0")}일${String(hours).padStart(2, "0")}시간`;
+  }
+
   async loadItems() {
     this.isLoading = true;
     try {
@@ -40,6 +55,7 @@ export default class MarketMyComponent extends Component {
       const byCat = {};
       (json?.items || []).forEach((it) => {
         const c = it?.category || "기타";
+        it.remaining_time = this._calcRemaining(it.expires_at);
         (byCat[c] ||= []).push(it);
       });
       const grouped = Object.keys(byCat)

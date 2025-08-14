@@ -12,10 +12,18 @@ export default class MarketItemComponent extends Component {
     }
     set(item, "isCooldown", true);
     try {
-      await ajax("/market/buy", { type: "POST", data: { item_id: item.id } });
+      const result = await ajax("/market/purchase", {
+        type: "POST",
+        data: { item_id: item.id },
+      });
       set(item, "owned", true);
+      window.bootbox.alert(`${result.before_points} > ${result.after_points}`);
     } catch (e) {
-      popupAjaxError(e);
+      if (e.jqXHR?.responseJSON?.error) {
+        window.bootbox.alert(e.jqXHR.responseJSON.error);
+      } else {
+        popupAjaxError(e);
+      }
     } finally {
       setTimeout(() => {
         set(item, "isCooldown", false);
