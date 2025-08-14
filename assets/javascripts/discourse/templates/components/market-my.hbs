@@ -1,4 +1,4 @@
-{{!-- assets/javascripts/discourse/templates/market.hbs (my 탭 부분 예시) --}}
+{{!-- assets/javascripts/discourse/templates/components/market-my.hbs --}}
 <h1 class="market-title">
   내 아이템
   <button
@@ -16,50 +16,44 @@
 {{#if this.isLoading}}
   <p class="market-empty">불러오는 중...</p>
 {{else}}
-  {{#if this.items}}
-    {{#if this.items.length}}
-      {{#each this.items as |group|}}
-        <section class="market-section">
-          <h2 class="market-section-title">{{group.category}}</h2>
+  {{#if this.items.length}}
+    {{#each this.items as |group|}}
+      <section class="market-section">
+        <h2 class="market-section-title">{{group.category}}</h2>
 
-          <div class="market-grid">
-            {{#if group.items}}
-              {{#each group.items as |item|}}
-                <article class="market-card">
-                  <div class="market-media">
-                    {{#if item.image_url}}
-                      <img class="market-thumb" src={{item.image_url}} alt={{item.name}} loading="lazy" />
-                    {{else}}
-                      <img class="market-thumb" src={{get-url "/images/no_image.png"}} alt="이미지 없음" loading="lazy" />
-                    {{/if}}
-                  </div>
+        <div class="market-grid">
+          {{#each group.items as |item|}}
+            <article class="market-card">
+              <div class="market-media">
+                {{#if item.image_url}}
+                  <img class="market-thumb" src={{item.image_url}} alt={{item.name}} loading="lazy" />
+                {{else}}
+                  <img class="market-thumb" src={{get-url "/images/no_image.png"}} alt="이미지 없음" loading="lazy" />
+                {{/if}}
+              </div>
 
-                  <div class="market-info">
-                    <h3 class="market-name">{{item.name}}</h3>
+              <div class="market-info">
+                <h3 class="market-name">{{item.name}}</h3>
 
-                    <button
-                      class="btn use-btn"
-                      disabled={{if (eq this.togglingId item.inventory_id) true item._cooldown}}
-                      aria-disabled={{if (eq this.togglingId item.inventory_id) true item._cooldown}}
-                      title={{if (eq this.togglingId item.inventory_id) "처리 중..." (if item.is_used "해제" "장착")}}
-                      {{on "click" (fn this.toggleUse item)}}
-                    >
-                      {{#if (eq this.togglingId item.inventory_id)}}
-                        처리 중...
-                      {{else}}
-                        {{if item.is_used "해제" "장착"}}
-                      {{/if}}
-                    </button>
-                  </div>
-                </article>
-              {{/each}}
-            {{/if}}
-          </div>
-        </section>
-      {{/each}}
-    {{else}}
-      <p class="market-empty">보유한 아이템이 없습니다.</p>
-    {{/if}}
+                <button
+                  class="btn use-btn"
+                  disabled={{if (eq this.togglingId item.inventory_id) true item._cooldown}}
+                  aria-disabled={{if (eq this.togglingId item.inventory_id) true item._cooldown}}
+                  title={{if (eq this.togglingId item.inventory_id) "처리 중..." (if item.is_used "해제" "장착")}}
+                  {{on "click" (fn this.toggleUse item)}}
+                >
+                  {{#if (eq this.togglingId item.inventory_id)}}
+                    처리 중...
+                  {{else}}
+                    {{if item.is_used "해제" "장착"}}
+                  {{/if}}
+                </button>
+              </div>
+            </article>
+          {{/each}}
+        </div>
+      </section>
+    {{/each}}
   {{else}}
     <p class="market-empty">보유한 아이템이 없습니다.</p>
   {{/if}}
