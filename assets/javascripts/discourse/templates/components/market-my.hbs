@@ -3,14 +3,22 @@
   내 아이템
   <button
     type="button"
-    class="refresh-btn"
+    class="refresh-btn icon"
     disabled={{this.refreshCooling}}
     aria-disabled={{this.refreshCooling}}
+    aria-label="새로고침"
     title="새로고침"
     {{on "click" this.refresh}}
-  >
-    {{d-icon "sync"}}
-  </button>
+>
+  <img
+    class="refresh-icon"
+    src={{get-url "/images/refresh.png"}}
+    alt=""
+    role="presentation"
+    aria-hidden="true"
+    loading="lazy"
+  />
+</button>
 </h1>
 
 {{#if this.isLoading}}
