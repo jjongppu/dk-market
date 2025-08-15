@@ -40,7 +40,7 @@
                       disabled={{or item.owned item.isCooldown locked}}
                       aria-disabled={{or item.owned item.isCooldown locked}}
                       title={{if item.owned "이미 보유한 아이템입니다" "구매"}}
-                      {{on "click" (fn this.buy item)}}
+                      {{on "click" (fn this.openConfirm item)}}
                     >
                       {{if item.owned "보유중" "구매"}}
                     </button>
@@ -64,3 +64,23 @@
     <p class="market-empty">구매한 아이템이 없습니다.</p>
   {{/if}}
 {{/let}}
+
+{{!-- 확인 모달 --}}
+{{#if this.modalIsVisible}}
+  <DModal @title="구매 확인" @closeModal={{this.closeModal}}>
+    <:body>
+      {{#if this.pendingInfo}}
+        보유포인트 {{this.pendingInfo.points}}
+        / 사용포인트 {{this.pendingInfo.price_points}}
+        {{#if this.pendingInfo.duration_days}} / 기간 {{this.pendingInfo.duration_days}}일{{/if}}
+        <br/>정말 구매하시겠습니까?
+      {{else}}
+        로딩 중...
+      {{/if}}
+    </:body>
+    <:footer>
+      <DButton @label="취소" @action={{this.closeModal}} />
+      <DButton @label="구매" @class="btn-primary" @action={{this.confirmPurchase}} @disabled={{not this.pendingInfo}} />
+    </:footer>
+  </DModal>
+{{/if}}
