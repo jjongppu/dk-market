@@ -9,7 +9,7 @@ export default class MarketMyComponent extends Component {
   @tracked items = [];            // 카테고리별 그룹 [{ category, items: [] }, ...]
   @tracked isLoading = false;
   @tracked togglingId = null;
-  @tracked cooldownIds = [];      // inventory_id 배열
+  @tracked itemCooling = false;   // 모든 아이템에 대한 쿨다운
   @tracked refreshCooling = false;
 
   _cooldownTimers = new Map();
@@ -23,14 +23,6 @@ export default class MarketMyComponent extends Component {
     super.willDestroy?.();
     for (const [, t] of this._cooldownTimers) clearTimeout(t);
     this._cooldownTimers.clear();
-  }
-
-  _applyCooldownFlags(groups) {
-    const set = new Set(this.cooldownIds || []);
-    return (groups || []).map((g) => ({
-      ...g,
-      items: (g.items || []).map((i) => ({ ...i, _cooldown: set.has(i.inventory_id) })),
-    }));
   }
 
   _calcRemaining(expiresAt) {
@@ -64,7 +56,7 @@ export default class MarketMyComponent extends Component {
           category,
           items: byCat[category].sort((a, b) => (a?.name || "").localeCompare(b?.name || "")),
         }));
-      this.items = this._applyCooldownFlags(grouped);
+      this.items = grouped;
     } catch (e) {
       popupAjaxError(e);
       this.items = [];
@@ -115,22 +107,15 @@ export default class MarketMyComponent extends Component {
     } finally {
       this.togglingId = null;
 
-      // 쿨다운 추가
-      if (!(this.cooldownIds || []).includes(invId)) {
-        this.cooldownIds = [...(this.cooldownIds || []), invId];
-      }
-      // 아이템 플래그 업데이트
-      this.items = this._applyCooldownFlags(this.items);
-
-      // 타이머 갱신
-      const old = this._cooldownTimers.get(invId);
+      // 전체 버튼에 쿨다운 적용
+      this.itemCooling = true;
+      const old = this._cooldownTimers.get("__use__");
       if (old) clearTimeout(old);
       const t = setTimeout(() => {
-        this.cooldownIds = (this.cooldownIds || []).filter((id) => id !== invId);
-        this.items = this._applyCooldownFlags(this.items);
-        this._cooldownTimers.delete(invId);
+        this.itemCooling = false;
+        this._cooldownTimers.delete("__use__");
       }, 3000);
-      this._cooldownTimers.set(invId, t);
+      this._cooldownTimers.set("__use__", t);
     }
   }
 }

@@ -49,8 +49,8 @@
                 {{/if}}
                 <button
                   class="btn use-btn"
-                  disabled={{if (eq this.togglingId item.inventory_id) true item._cooldown}}
-                  aria-disabled={{if (eq this.togglingId item.inventory_id) true item._cooldown}}
+                  disabled={{or (eq this.togglingId item.inventory_id) this.itemCooling}}
+                  aria-disabled={{or (eq this.togglingId item.inventory_id) this.itemCooling}}
                   title={{if (eq this.togglingId item.inventory_id) "처리 중..." (if item.is_used "해제" "장착")}}
                   {{on "click" (fn this.toggleUse item)}}
                 >
