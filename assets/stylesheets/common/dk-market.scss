@@ -145,3 +145,13 @@
     }
   }
 }
+
+// Market effect styling
+.username.market-effect-nametag_effect {
+  text-shadow: 0 0 6px var(--tertiary);
+}
+
+img.market-effect-profile_effect {
+  box-shadow: 0 0 6px var(--tertiary);
+  border-radius: 50%;
+}
