@@ -18,5 +18,26 @@ require_relative "lib/dk_market/engine"
 register_asset "stylesheets/common/dk-market.scss"
 
 after_initialize do
-  # Code which should run after Rails has finished booting
+  add_to_serializer(:basic_user, :market_effects) do
+    inventories =
+      MarketUserInventory
+        .active_current
+        .in_use
+        .by_user(object)
+        .includes(:market_item)
+
+    items = inventories.map do |inv|
+      item = inv.market_item
+      item.inventory_id = inv.id
+      item.expires_at = inv.expires_at
+      item.is_used = true
+      item
+    end
+
+    items.map { |it| MarketItemSerializer.new(it, scope: scope, root: false).as_json }
+  end
+
+  add_to_serializer(:basic_user, :include_market_effects?) do
+    SiteSetting.dk_market_enabled
+  end
 end
