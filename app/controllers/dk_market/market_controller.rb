@@ -17,7 +17,7 @@ module ::DkMarket
           .joins(
             "LEFT JOIN gamification_level_infos ON gamification_level_infos.level = market_items.min_level",
           )
-          .select("market_items.*, gamification_level_infos.image_url AS level_image_url")
+          .select("market_items.*, gamification_level_infos.image_url AS level_image_url, gamification_level_infos.name AS level_name")
           .order(:min_level, :category, :name)
           .to_a
 

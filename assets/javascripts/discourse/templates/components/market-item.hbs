@@ -52,6 +52,8 @@
                     <div class="market-lock-overlay">
                       {{#if item.level_image_url}}
                         <img src={{item.level_image_url}} alt="필요 레벨" />
+                        <div class="market-lock-text">레벨 {{item.min_level}} 이상 필요</div>
+                        <div class="market-lock-level">{{item.level_name}}</div>
                       {{/if}}
                     </div>
                   {{/if}}
