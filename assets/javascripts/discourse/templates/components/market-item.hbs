@@ -40,9 +40,7 @@
                       disabled={{or item.owned item.isCooldown locked}}
                       aria-disabled={{or item.owned item.isCooldown locked}}
                       title={{if item.owned "이미 보유한 아이템입니다" "구매"}}
-                      {{#unless locked}}
-                        {{on "click" (fn this.openConfirm item)}}
-                      {{/unless}}
+                      {{unless locked (on "click" (fn this.openConfirm item))}}
                     >
                       {{if item.owned "보유중" "구매"}}
                     </button>
