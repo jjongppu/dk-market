@@ -19,25 +19,55 @@ register_asset "stylesheets/common/dk-market.scss"
 
 after_initialize do
   add_to_serializer(:basic_user, :market_effects) do
-    inventories =
-      MarketUserInventory
-        .active_current
-        .in_use
-        .by_user(object)
-        .includes(:market_item)
+    # 사이트 설정 로그
+    Rails.logger.debug("[dk-market] market_effects invoked user_id=#{object.id} enabled=#{SiteSetting.dk_market_enabled} current_user_id=#{scope&.current_user&.id}")
 
-    items = inventories.map do |inv|
-      item = inv.market_item
-      item.inventory_id = inv.id
-      item.expires_at = inv.expires_at
-      item.is_used = true
-      item
+    return [] unless SiteSetting.dk_market_enabled
+
+    start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+
+    begin
+      # 로딩 시작 로그
+      Rails.logger.debug("[dk-market] loading inventories for user_id=#{object.id}")
+
+      inventories =
+        MarketUserInventory
+          .active_current
+          .in_use
+          .by_user(object) # 필요 시 .by_user(object.id) 로 변경
+          .includes(:market_item)
+
+      Rails.logger.debug("[dk-market] inventories loaded count=#{inventories.size} user_id=#{object.id}")
+
+      items = inventories.map do |inv|
+        item = inv.market_item
+        # 가상 속성 할당 시도 로그 (모델에 attr_accessor 없으면 NoMethodError 가능)
+        begin
+          item.inventory_id = inv.id
+          item.expires_at   = inv.expires_at
+          item.is_used      = true
+        rescue => e
+          Rails.logger.warn("[dk-market] virtual-attr assign failed item_id=#{item&.id} inv_id=#{inv.id} error=#{e.class}: #{e.message}")
+        end
+        item
+      end
+
+      serialized = items.map { |it| MarketItemSerializer.new(it, scope: scope, root: false).as_json }
+
+      duration_ms = ((Process.clock_gettime(Process::CLOCK_MONOTONIC) - start) * 1000).round(1)
+      Rails.logger.debug("[dk-market] market_effects done user_id=#{object.id} items=#{serialized.size} duration_ms=#{duration_ms}")
+
+      serialized
+    rescue => e
+      Rails.logger.error("[dk-market] market_effects error user_id=#{object.id} #{e.class}: #{e.message}")
+      Rails.logger.error("[dk-market] backtrace: #{Array(e.backtrace).first(5).join(' | ')}")
+      []
     end
-
-    items.map { |it| MarketItemSerializer.new(it, scope: scope, root: false).as_json }
   end
 
   add_to_serializer(:basic_user, :include_market_effects?) do
-    SiteSetting.dk_market_enabled
+    enabled = SiteSetting.dk_market_enabled
+    Rails.logger.debug("[dk-market] include_market_effects? user_id=#{object.id} enabled=#{enabled}")
+    enabled
   end
 end
