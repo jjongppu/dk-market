@@ -81,6 +81,15 @@
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+
+        .market-lock-level-name {
+          margin-top: 4px;
+          font-weight: 600;
+        }
       }
     }
   }

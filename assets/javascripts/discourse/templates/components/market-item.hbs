@@ -61,7 +61,10 @@
                   {{#if locked}}
                     <div class="market-lock-overlay">
                       {{#if item.level_image_url}}
-                        <img src={{item.level_image_url}} alt="필요 레벨" />
+                        <img src={{item.level_image_url}} alt={{item.level_name}} />
+                      {{/if}}
+                      {{#if item.level_name}}
+                        <span class="market-lock-level-name">{{item.level_name}}</span>
                       {{/if}}
                     </div>
                   {{/if}}
