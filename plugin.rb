@@ -39,18 +39,26 @@ after_initialize do
 
       Rails.logger.debug("[dk-market] inventories loaded count=#{inventories.size} user_id=#{object.id}")
 
-      items = inventories.map do |inv|
-        item = inv.market_item
-        # 가상 속성 할당 시도 로그 (모델에 attr_accessor 없으면 NoMethodError 가능)
-        begin
-          item.inventory_id = inv.id
-          item.expires_at   = inv.expires_at
-          item.is_used      = true
-        rescue => e
-          Rails.logger.warn("[dk-market] virtual-attr assign failed item_id=#{item&.id} inv_id=#{inv.id} error=#{e.class}: #{e.message}")
+      items =
+        inventories.filter_map do |inv|
+          item = inv.market_item
+
+          unless item
+            Rails.logger.warn("[dk-market] inventory missing market_item inv_id=#{inv.id}")
+            next
+          end
+
+          # 가상 속성 할당 시도 로그 (모델에 attr_accessor 없으면 NoMethodError 가능)
+          begin
+            item.inventory_id = inv.id
+            item.expires_at   = inv.expires_at
+            item.is_used      = true
+          rescue => e
+            Rails.logger.warn("[dk-market] virtual-attr assign failed item_id=#{item&.id} inv_id=#{inv.id} error=#{e.class}: #{e.message}")
+          end
+
+          item
         end
-        item
-      end
 
       serialized = items.map { |it| MarketItemSerializer.new(it, scope: scope, root: false).as_json }
 
